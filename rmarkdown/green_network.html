@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Mapping the evelotion of weed</title>
+
+<script src="green_network_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="green_network_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="green_network_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="green_network_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="green_network_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="green_network_files/navigation-1.1/tabsets.js"></script>
+<link href="green_network_files/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="green_network_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Mapping the evelotion of weed</h1>
+
+</div>
+
+
+<p><strong>Overview</strong>: This post will cover how to download a marijuana database via webscraping, and how to create and visualize a network that depicts the evolution of the different marijuana strains. <strong>Reading time</strong>: 45 minutes <strong>Expertise level</strong>: 3/5</p>
+<hr />
+<p><a href="https://www.ibmbigdatahub.com/blog/what-graph-analytics" class="uri">https://www.ibmbigdatahub.com/blog/what-graph-analytics</a></p>
+<div id="the-motivation" class="section level3">
+<h3>The motivation</h3>
+<div id="part-one-web-scraping" class="section level5">
+<h5>Part one: web scraping</h5>
+<p>With the amount of data that is being produced in the world today, it stands to reason that data availability is greater than ever and is only just starting to grow. Sometimes the data that one is looking for is easily accessible in a nice flat file. There is nothing like a clean and easy to download .csv document. Other times, it’s a little harder to get, as it is with APIs. These require a little more code and sometimes require you to pay for the data. APIs are extremely popular and they cover all sorts of data. For example, here is the biggest API marketplace in the world:</p>
+<div style="text-align: center;">
+<p><a href="https://market.mashape.com/explore" class="uri">https://market.mashape.com/explore</a></p>
+</div>
+<p>A lot of other times, however, the data is not in any type of structured format and just lives inside of a webpage. Although accessible, getting your hands on it is a little more customized and complicated.</p>
+<p>Enter web scaping.</p>
+<p>Simply put, web scarping is writing a code that extracts data from HTML pages by using the patterns people use to build their webpages. Although it is somewhat “hackerish” - which, to me honsest, is something that I am very much attracted to -, it is becoming more and more prevelant and accpeted as a part of data science. As such, it is a great tool to learn.</p>
+<p>As Technopedia puts it:</p>
+<blockquote>
+<p>The practice of Web scraping has drawn a lot of controversy because the terms of use for some websites do not allow certain kinds of data mining. Despite the legal challenges, Web scraping promises to become a popular way of collecting information as these kinds of aggregated data resources become more capable.</p>
+</blockquote>
+<div style="text-align: center;">
+<p>Source: <a href="https://www.techopedia.com/definition/5212/web-scraping" class="uri">https://www.techopedia.com/definition/5212/web-scraping</a></p>
+</div>
+</div>
+<div id="part-two-networks" class="section level5">
+<h5>Part two: networks</h5>
+<p>Networks are a very powerful part of a data scienctist toolbox. They are created by modeling relationships or interactions between objects or individuals. And they allow for answering questions about the overall network, about the groups withing network, and about the individual elements. They can be used for:</p>
+<ul>
+<li>Finding social media influencers</li>
+<li>Modeling the spread of diseases</li>
+<li>Detecting fraud</li>
+<li>Optimizing delivery routes</li>
+<li>Recommending movies and TV shows</li>
+</ul>
+<p>Among many other things.</p>
+<p>They also allow for spectacular visualizations:</p>
+<p><img src="airports_network.gif" width="95%" style="display: block; margin: auto;" /></p>
+<div style="text-align: center;">
+<p>Source: <a href="https://travelbetweenthepages.com/2016/06/09/data-visualization-is-a-beautiful-thing/">Travel Between the Pages</a></p>
+</div>
+</div>
+<div id="in-short" class="section level5">
+<h5>In short</h5>
+<p>Web scraping is awesome. Networks are awesome. This post covers both in a very hands on method. I think you’re going to really enjoy it!</p>
+</div>
+</div>
+<div id="setting-things-up" class="section level3">
+<h3>Setting things up</h3>
+<div id="loading-libraries" class="section level5">
+<h5>Loading libraries</h5>
+<p>The first step is always to import all the necessary libraries.</p>
+<ul>
+<li>I use the <em>tidyverse</em>, the ultimate data wrangling framework, and a must in every project I work on</li>
+<li>The <em>stringr</em> library is an R workhorse for text processing</li>
+<li><em>rvest</em> is the libary Hadley Wickham, the author of the tidyverse, built for web scraping. It is perfect in that it is super easy to use and fits right into a tidyverse workstream.</li>
+<li><em>igraph</em> probably the most used library for network analytics (available in both R and Python).</li>
+<li>The <em>ggraph</em> library was build for ploting networks within the ggplot framework. It makes plotting graphs, a notoriously difficult task to do well and efficiently, a lot easier.</li>
+<li>I won’t load the <em>bc3net</em> library, which provides additional network analytics functionality, but I will use it.</li>
+</ul>
+<pre class="r"><code>library(tidyverse)
+library(stringr)
+library(rvest)
+library(igraph)
+library(ggraph)</code></pre>
+</div>
+</div>
+<div id="scraping-the-data" class="section level3">
+<h3>Scraping the data</h3>
+<div id="overview-of-the-data-source" class="section level5">
+<h5>Overview of the data source</h5>
+<p>The source of the data we are going to scrape is a site called Wikileaf.</p>
+<p><img src="wikileaf_home.JPG" width="95%" style="display: block; margin: auto;" /></p>
+<div style="text-align: center;">
+<p>Source: <a href="https://www.wikileaf.com" class="uri">https://www.wikileaf.com</a></p>
+</div>
+<p>Although it’s primary purpose is for people to find marijuana dispensaries, the site also includes a very extensive and incredibly detailed library of diferent marijuana strains.</p>
+<p><img src="wikileaf_strains.JPG" width="95%" style="display: block; margin: auto;" /></p>
+<p>With 27 pages and close to 1300 strains, it is an ideal data source.</p>
+<p><img src="wikileaf_strains_last-01.png" width="95%" style="display: block; margin: auto;" /></p>
+<div style="text-align: center;">
+<p>Source: <a href="https://www.wikileaf.com/strains/" class="uri">https://www.wikileaf.com/strains/</a></p>
+</div>
+<p>Moreover, there is more than enough information about the different strains. The individual pages include:</p>
+<ul>
+<li>Main strain (Sativa, Indica or hybrid)</li>
+<li>Lineage (the “parent” strains)</li>
+<li>Country of origin</li>
+<li>Detailed description</li>
+<li>THC content specifics</li>
+<li>Common usages</li>
+<li>Effects</li>
+</ul>
+<p><img src="wikileaf_page_example_1.JPG" width="95%" style="display: block; margin: auto;" /></p>
+<p><img src="wikileaf_page_example_2.JPG" width="95%" style="display: block; margin: auto;" /></p>
+<div style="text-align: center;">
+<p>Source: <a href="https://www.wikileaf.com/strain/stardawg/" class="uri">https://www.wikileaf.com/strain/stardawg/</a></p>
+</div>
+</div>
+<div id="part-one-getting-the-lists-of-strains" class="section level5">
+<h5>Part one: getting the lists of strains</h5>
+<p>The first thing we need to do is to get the 27 pages that contain the name and url information of all of the strains. This is easy enough: we just have to loop through the links to each of the pages. Each page contains 50 results, so we can increase a counter by 50 all the way to its maximum number, 1300.</p>
+<ul>
+<li><a href="https://www.wikileaf.com/strains/?result=0" class="uri">https://www.wikileaf.com/strains/?result=0</a></li>
+<li><a href="https://www.wikileaf.com/strains/?result=50" class="uri">https://www.wikileaf.com/strains/?result=50</a></li>
+<li><a href="https://www.wikileaf.com/strains/?result=100" class="uri">https://www.wikileaf.com/strains/?result=100</a></li>
+</ul>
+<p>And so on.</p>
+<p>For each of these pages, we just have to save the html, from which we can extract all the relevant information once we’ve downloaded all of the pages.</p>
+<pre class="r"><code># Set up base url to which we&#39;ll add the increased counter
+base_url &lt;-
+    &#39;https://www.wikileaf.com/strains/?result=&#39;
+
+# Create a pagination vector: a sequence from 0 to 1300, by 50
+pagination &lt;-
+    seq(0, 1300, 50)
+
+# Loop through the pagination numbres
+for(i in 1:length(pagination)){
+    
+    # Create a url by pasting the base ulr and the pagination
+    url_temp &lt;-
+        str_c(base_url, pagination[i])
+    
+    # Read the html from the page
+    temp_html &lt;-
+        read_html(url_temp)
+    
+    # Write the html onto a file in the strain lists folter
+    write_lines(temp_html,
+                str_c(&#39;strain_lists/strains_&#39;, i, &#39;.html&#39;))
+    
+    # Take a small 4 second break
+    Sys.sleep(4)
+    # This is the &quot;polite way of scraping&quot; so as to not
+    # overwhelm the website&#39;s server with a lot of
+    # consecutive calls
+    
+}</code></pre>
+<p>Perfect. Now we have a copy of each of the 27 pages saved locally. Now we can extract the relavant information without making calls to the website. We also have a local copy of the data in case we want to use it for something else. Saving local copies is something that I usually do when web scraping.</p>
+<p>Here is a great overview of the main functionalities of the rvest package and a more detailed overview of the web scraping workflow with rvest. I recommend that you at least review the first before moving forward so that you can best understand the follwoing steps.</p>
+<ul>
+<li>General overview: <a href="https://stat4701.github.io/edav/2015/04/02/rvest_tutorial/" class="uri">https://stat4701.github.io/edav/2015/04/02/rvest_tutorial/</a></li>
+<li>Detailed tutorial: <a href="https://www.datacamp.com/community/tutorials/r-web-scraping-rvest" class="uri">https://www.datacamp.com/community/tutorials/r-web-scraping-rvest</a></li>
+</ul>
+<p>Now we are ready to read the pages back in and extract the links to all of the strain pages along with the names of the strains. In order to do this, we need to find the unique elements within the html that allow to zero in on the data that we want.</p>
+<p><img src="strain_class-01.png" width="95%" style="display: block; margin: auto;" /></p>
+<p><img src="strain_link-01.png" width="95%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># First, we read in the html of the first file
+# (this contains the first 50 results)
+strain_file &lt;-
+        read_html(&#39;strain_lists/strains_1.html&#39;)
+
+# Within the file, we first look to extract a single strain
+# We can do this by looking for the &quot;list-item-paginate&quot;
+# class which is what distinguishes the strain elements
+node &lt;-
+    strain_file %&gt;%
+    # html_node grabs the first instance we are looking for
+    html_node(&#39;.list-item-paginate&#39;)
+
+# From the node elements, we can look for the &quot;data-st-name&quot;
+# to get the strain name
+strain_name &lt;-
+        node %&gt;%
+        html_attr(&#39;data-st-name&#39;)
+
+# From node, we can look for an &quot;a&quot; tag node
+# and within that for the &quot;href&quot; attribute
+# to get the url of the strain page
+url &lt;-
+        node %&gt;%
+        html_node(&#39;a&#39;) %&gt;%
+        html_attr(&#39;href&#39;)
+
+strain_name</code></pre>
+<pre><code>## [1] &quot;Alien Technology&quot;</code></pre>
+<pre class="r"><code>url</code></pre>
+<pre><code>## [1] &quot;https://www.wikileaf.com/strain/alien-technology/&quot;</code></pre>
+<p>Perfect! Now we can easily wrap this logic into a function,</p>
+<pre class="r"><code># The function grabs he strain and the url,
+# stores them and returns a dataframe
+get_link_and_name &lt;- function(node){
+
+    temp_strain &lt;-
+        node %&gt;%
+        html_attr(&#39;data-st-name&#39;)
+
+    temp_url &lt;-
+        node %&gt;%
+        html_node(&#39;a&#39;) %&gt;%
+        html_attr(&#39;href&#39;)
+
+    temp_df &lt;-
+        data_frame(
+          strain = temp_strain,
+          url = temp_url
+        )
+
+    return(temp_df)
+
+}
+
+# Let&#39;s test out the function
+get_link_and_name(node)</code></pre>
+<pre><code>## # A tibble: 1 x 2
+##   strain           url                                              
+##   &lt;chr&gt;            &lt;chr&gt;                                            
+## 1 Alien Technology https://www.wikileaf.com/strain/alien-technology/</code></pre>
+<p>That worked exactly how we wanted it!</p>
+<p>Now we can replicate this for all of the strains in each of the list files.</p>
+<pre class="r"><code># Get a list of all of the strain list files
+strain_files &lt;-
+    list.files(&#39;strain_lists&#39;)
+
+# Create a repository where we will dump the scraped data
+# from each of the strain list files
+strain_links_repository &lt;-
+    list()
+
+# Loop across all 27 of the strain files
+for(i in 1:length(strain_files)){
+
+    # Read the looped strain list file
+    page_temp &lt;-
+        read_html(str_c(&#39;strain_lists/&#39;, strain_files[i]))
+    
+    # Create a dataframe containing the scraped data
+    links_temp_df &lt;-
+        page_temp %&gt;%
+        # This is different from before where we used &quot;html_node&quot;
+        # Now we are grabbing all the nodes that match our search
+        html_nodes(&#39;.list-item-paginate&#39;) %&gt;%
+        # Now we map each of the nodes to get_link_and_name
+        # which will return a list of dataframes
+        map(get_link_and_name) %&gt;%
+        # Since all of the dataframes have the exact same structure
+        # we can easily create a single dataframe by collapseing
+        # all of the dataframes in the list with bind_rows
+        bind_rows()
+    
+    # Save the results in the repository
+    strain_links_repository[[i]] &lt;-
+        links_temp_df
+
+}
+
+# Collapse all of the dataframes in the repository to create a single one
+strain_links_df &lt;-
+    bind_rows(strain_links_repository) %&gt;%
+    # Make sure the rows are all unique
+    # (this is just a best practice)
+    distinct() %&gt;%
+    # Create unique ids for each of the strains for easy joins later on
+    mutate(id = 1:n())
+
+# Make sure the dataframe is ok
+head(strain_links_df)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   strain            url                                                 id
+##   &lt;chr&gt;             &lt;chr&gt;                                            &lt;int&gt;
+## 1 Alien Technology  https://www.wikileaf.com/strain/alien-technolog~     1
+## 2 Arcata Trainwreck https://www.wikileaf.com/strain/arcata-trainwre~     2
+## 3 Aspen OG          https://www.wikileaf.com/strain/aspen-og/            3
+## 4 Blue Cookies      https://www.wikileaf.com/strain/blue-cookies/        4
+## 5 Blue Dream        https://www.wikileaf.com/strain/blue-dream/          5
+## 6 Blue God          https://www.wikileaf.com/strain/blue-god/            6</code></pre>
+<img src="sweet_lu.gif" width="80%" style="display: block; margin: auto;" />
+<div style="text-align: center;">
+<p>Source: <a href="https://tenor.com/view/sweet-lou-grind-gif-4497985" class="uri">https://tenor.com/view/sweet-lou-grind-gif-4497985</a></p>
+</div>
+<p>Movie note: although not as good as <em>Airborne</em>, I’ve always thought <em>Grind</em> (from where the GIF was made) was a pretty underrated skater movie.</p>
+</div>
+<div id="part-two-downloading-the-strain-pages" class="section level5">
+<h5>Part two: downloading the strain pages</h5>
+<p>With the links to the individual pages of the strains, we can visit each page and, just like with the list pages, save the html files locally. However, because there are over 1300 strain pages versus just 27 strain list pages, we have to build a little more structure in order to handle errors, which have a high probability of occuring when trying to ping a website that many times.</p>
+<p>For a great and detailes walkthrough of error handling in, I recommend the following CRAN article: <a href="https://cran.r-project.org/web/packages/tryCatchLog/vignettes/tryCatchLog-intro.html" class="uri">https://cran.r-project.org/web/packages/tryCatchLog/vignettes/tryCatchLog-intro.html</a></p>
+<pre class="r"><code># Set empty vector to store the ids of the pages that
+# did not download well and start a count of the number
+# of consecutve failures.
+failed_ids &lt;- c()
+repeat_errors &lt;- 0
+
+# Loop through all the strains in the dataframe
+for(i in 1:nrow(strain_links_df)){
+    
+    # Get train links and ID
+    link &lt;- strain_links_df$url[i]
+    id &lt;- strain_links_df$id[i]
+    
+    # Error handling while reading the html
+    html_article &lt;-
+        tryCatch(
+            
+            # Try to read html page
+            read_html(link),
+            
+            # If warning or error, return null
+            warning = function(w) {
+                NULL;
+            },
+            
+            error = function(e) {
+                NULL;
+            }
+        )
+    # So if the page read correctly, html_article contains the html.
+    # If there was an error, html_article will be null.
+    
+    
+    # If there was an error, log it
+    if( is.null(html_article) ){
+        
+        # Add idd of strain that caused the error
+        failed_ids &lt;-
+            c(failed_ids, id)
+        
+        # Add count of consecutive errors
+        repeat_errors &lt;-
+            repeat_errors + 1
+        
+        # Message the number of repeat errors
+        message( str_c(&#39;Repeat errors: &#39;, repeat_errors) )
+        
+        # If there are more than 5 consecutive errors,
+        # break the loop (stops all downloading)
+        if( repeat_errors &gt; 5 ){
+            break
+        }
+        
+        # If there was an error, and there aren&#39;t
+        # more than 5 consecutive errors,
+        # go to next strain
+        next
+    }
+    
+    
+    # Reset repeat errors counter if no error found
+    repeat_errors &lt;- 0
+    
+    # Set name of the file where the html will be saved
+    strain_doc_name &lt;-
+        str_c(&#39;strain_pages/&#39;, id, &#39;.html&#39;)
+    
+    # Write the html file
+    write_lines(html_article,
+                strain_doc_name)
+    
+    #message(id)
+    
+    # In order to not make a lot of calls to the website
+    # in a very short period of time (one right after the other)
+    # pause the code for a few seconds between the download
+    Sys.sleep(
+        # Pauses between 0 and 10 seconds (random)
+        runif(1, min = 0, max = 10)
+    )
+    
+}</code></pre>
+<p>That seemed to run smoothly. We can check to see how many files are in the strain_files folder and also see which strains failed to be parsed.</p>
+<pre class="r"><code># Get number of strain pages stored
+list.files(&#39;strain_pages&#39;) %&gt;%
+    length()</code></pre>
+<pre><code>## [1] 1326</code></pre>
+<pre class="r"><code># See which strains failed to be scraped
+failed_ids</code></pre>
+<pre><code>## [1] 270</code></pre>
+</div>
+<div id="part-three-scraping-the-strain-pages" class="section level5">
+<h5>Part three: scraping the strain pages</h5>
+<p>Now that we have the pages for all of the strains, we can build the code that reads them one by one and grabs all of the necessary information. As mentioned previously, we are looking for:</p>
+<p><strong>Main strain (Sativa, Indica or hybrid)</strong> <img src="scrape_main_strain.png" width="95%" style="display: block; margin: auto;" /></p>
+<p><strong>Lineage (the “parent” strains)</strong> <img src="scrape_lineage.png" width="95%" style="display: block; margin: auto;" /></p>
+<p><strong>Country of origin</strong> <img src="scrape_origin.png" width="95%" style="display: block; margin: auto;" /></p>
+<p><strong>Detailed description</strong> <img src="scrape_description.png" width="95%" style="display: block; margin: auto;" /></p>
+<p><strong>THC content specifics</strong> <img src="scrape_thc.png" width="95%" style="display: block; margin: auto;" /></p>
+<p><strong>Common usages and Effects</strong> <img src="scrape_use_effects.png" width="95%" style="display: block; margin: auto;" /></p>
+<p>I won’t walk trhough the details of logic behind each of the data points we are looking for. Instead, I’ll go straight into building the function that we will apply to each of the strain pages. The comments in the code should be enough to guide you through the scrape.</p>
+<p>For each of the data points we are interrested in, the get_strain_info function extract the relevant data and creates a dataframe containing the category (description, lineage, etc.), the variable (for THC, for example, the averagge main strain, the highest strain test and the average strain test), and the value. The dataframes are then collapsed into one and returned.</p>
+<p>Not all strains have lineage or origin. So for these data points, we have to create an error handling structure that returns a NULL or an NA, depending what is most appropriate, whenever the data point is not found.</p>
+<p>I appologize for the length of the following code. There was no way of getting around it.</p>
+<pre class="r"><code># Get list of all the strain pages
+strain_pages &lt;-
+    list.files(&#39;strain_pages&#39;) %&gt;%
+    # Paste the folder name with the name of the file
+    str_c(&#39;strain_pages/&#39;, .)
+
+get_strain_info &lt;- function(strain_page, msg = FALSE){
+    
+    # When set to TRUE, the msg parameter allows for
+    # the function to message the page being scraped
+    if(msg == TRUE){
+        message(strain_page)
+    }
+    
+    # Read html page
+    page &lt;-
+        read_html(strain_page)
+    
+    
+    ### 1. Description
+    # Extract html text from the strain-content class
+    description &lt;-
+        page %&gt;%
+        html_node(&#39;.strain-content&#39;) %&gt;%
+        html_text()
+    
+    # Create dataframe with data
+    description_df &lt;-
+        data_frame(category = &#39;description&#39;,
+                   var = &#39;description&#39;,
+                   val = description)
+
+    ### 2. THC
+    # Extract html text from the .strain-bar-title classes
+    # inside of the strain_thc id
+    # This gets the variables names
+    thc &lt;-
+        page %&gt;%
+        html_node(&#39;#strain_thc&#39;) %&gt;%
+        html_nodes(&#39;.strain-bar-title&#39;) %&gt;%
+        html_text() %&gt;%
+        # Get rid of excess spaces at the beginning and end
+        str_trim()
+    
+    # Extract html text from the graph-val classes
+    # inside of the strain_thc id
+    # This gets the data values
+    thc_values &lt;-
+        page %&gt;%
+        html_node(&#39;#strain_thc&#39;) %&gt;%
+        html_nodes(&#39;.graph-val&#39;) %&gt;%
+        html_text() %&gt;%
+        # Remove the percentage sign from the value
+        str_replace_all(&#39;%&#39;, &#39;&#39;)
+    
+    # Create a dataframe with the thc variables and values
+    thc_df &lt;-
+        data_frame(category = &#39;thc&#39;,
+                   var = thc,
+                   val = thc_values)
+
+    ### 3. Use
+    # Extract html text from the strain-bar-title classes
+    # inside of the strain_use id
+    # This gets the variables names
+    use &lt;-
+        page %&gt;%
+        html_node(&#39;#strain_use&#39;) %&gt;%
+        html_nodes(&#39;.strain-bar-title&#39;) %&gt;%
+        html_text() %&gt;%
+        str_trim()
+    
+    # Extract value attribute from the input tags
+    # inside of the strain_use id
+    # This gets the data values
+    use_values &lt;-
+        page %&gt;%
+        html_node(&#39;#strain_use&#39;) %&gt;%
+        html_nodes(&#39;input&#39;) %&gt;%
+        html_attr(&#39;value&#39;)
+    
+    # Create a dataframe with the use variables and values
+    use_df &lt;-
+        data_frame(category = &#39;use&#39;,
+                   var = use,
+                   val = use_values)
+
+    ### 3. Effects
+    # This works in the exact same way as the &quot;use&quot;&quot; extraction
+    effects &lt;-
+        page %&gt;%
+        html_node(&#39;#effects&#39;) %&gt;%
+        html_nodes(&#39;.strain-bar-title&#39;) %&gt;%
+        html_text() %&gt;%
+        str_trim()
+
+    effects_values &lt;-
+        page %&gt;%
+        html_node(&#39;#effects&#39;) %&gt;%
+        html_nodes(&#39;input&#39;) %&gt;%
+        html_attr(&#39;value&#39;)
+
+    effects_df &lt;-
+        data_frame(category = &#39;effects&#39;,
+                   var = effects,
+                   val = effects_values)
+
+    ### 4. Lineage
+    # Create an error handling mechanism
+    # when there is no llineage information
+    lineage &lt;-
+        tryCatch(
+            # Extract html text from the a tags
+            # inside of the lineage class
+            page %&gt;%
+                html_node(&#39;.lineage&#39;) %&gt;%
+                html_nodes(&#39;a&#39;) %&gt;%
+                html_text() %&gt;%
+                str_trim(),
+
+            warning = function(w) {
+                NULL;
+            },
+
+            error = function(e) {
+                NULL;
+            }
+        )
+    
+    # Convert NULL values or empty vectors into NA
+    # This is to create a vector of lenght &gt; 1
+    # to feed into the dataframe
+    # R will give an error otherwise
+    if(length(lineage) == 0 | is.null(lineage)){
+        lineage &lt;- NA
+    }
+    
+    # Create a lineage dataframe
+    # Add an order component to the variable name
+    # to be able to distinguish the different lineages
+    lineage_df &lt;-
+        data_frame(category = &#39;lineage&#39;,
+                   val = lineage) %&gt;%
+        mutate(ord = 1:n()) %&gt;%
+        mutate(var = str_c(&#39;lineage &#39;, ord)) %&gt;%
+        select(-ord)
+
+    ### 5. Origin
+    origin &lt;-
+        tryCatch(
+            # Extract html text from the origin class
+            # This is a little more involved
+            # in order to handle multiple country names
+            page %&gt;%
+                html_node(&#39;.origin&#39;) %&gt;%
+                html_text() %&gt;%
+                str_trim() %&gt;%
+                # Remover the text before the country name
+                str_replace_all(&#39;Origin: &#39;, &#39;&#39;) %&gt;%
+                
+                # The following is for handling multiple
+                # countries of origin:
+                # Replace the space inside a country name
+                # with &quot;iii&quot; in order to distinguish it
+                # when separating the country names
+                # For example: &quot;HolandUnited States&quot;
+                # becomes: &quot;HolandUnitediiiStates&quot;
+                str_replace_all(&#39; &#39;, &#39;iii&#39;) %&gt;%
+                # Convert the snakecase to an underscore
+                # For example: &quot;HolandUnitediiiStates&quot;
+                # becomes: &quot;Holand_Unitediii_States&quot;
+                snakecase::to_mixed_case() %&gt;%
+                # Replace &quot;iii_ with space&quot;
+                # For example: &quot;Holand_Unitediii_States&quot;
+                # becomes: &quot;Holand_United States&quot;
+                str_replace_all(&#39;iii_&#39;, &#39; &#39;) %&gt;%
+                # Separate the country names
+                # where there is an underscore
+                str_split(&#39;_&#39;) %&gt;%
+                # Convert resulting list into a vector
+                unlist(),
+
+            warning = function(w) {
+                NA;
+            },
+
+            error = function(e) {
+                NA;
+            }
+        )
+    
+    # Create a dataframe with origin data
+    # with same order logic as lineage
+    origin_df &lt;-
+        data_frame(category = &#39;origin&#39;,
+                   val = origin) %&gt;%
+        mutate(ord = 1:n()) %&gt;%
+        mutate(var = str_c(&#39;origin &#39;, ord)) %&gt;%
+        select(-ord)
+
+    ### Join all the data
+    # Collapse the dataframes into a single one
+    temp_df &lt;-
+        bind_rows(
+            description_df,
+            thc_df,
+            use_df,
+            effects_df,
+            lineage_df,
+            origin_df
+        ) %&gt;%
+        # Remove the text from the folder an page name
+        # to get a numeric id value for joins
+        mutate(id =
+                   strain_page %&gt;%
+                   str_replace_all(
+                       &#39;strain_pages/|\\.html&#39;,
+                       &#39;&#39;) %&gt;%
+                   as.numeric())
+    
+    # Return resulting dataframe
+    return(temp_df)
+
+}
+
+# Try the get_strain_info function on the first 5 pages
+strain_details_test &lt;-
+    map(strain_pages[1:5], get_strain_info, msg = TRUE)</code></pre>
+<pre><code>## strain_pages/1.html</code></pre>
+<pre><code>## strain_pages/10.html</code></pre>
+<pre><code>## strain_pages/100.html</code></pre>
+<pre><code>## strain_pages/1000.html</code></pre>
+<pre><code>## strain_pages/1001.html</code></pre>
+<pre class="r"><code># Head the result of the first page
+# to make sure it worked
+head(strain_details_test[[1]] %&gt;%
+         # Remove description so that it fits
+         filter(var != &#39;description&#39;))</code></pre>
+<pre><code>## # A tibble: 6 x 4
+##   category var                           val      id
+##   &lt;chr&gt;    &lt;chr&gt;                         &lt;chr&gt; &lt;dbl&gt;
+## 1 thc      Average Indica                12.5   1.00
+## 2 thc      Alien Technology Highest Test 19.0   1.00
+## 3 thc      Alien Technology Average      13.0   1.00
+## 4 use      Insomnia                      100    1.00
+## 5 use      Pain                          100    1.00
+## 6 use      Anxiety                       60     1.00</code></pre>
+<p>Fiuf! All that code worked! Now we can run the function on all of the pages.</p>
+<pre class="r"><code>if(file.exists(&#39;strain_details_df.rds&#39;)){
+    
+    strain_details_df &lt;-
+        read_rds(&#39;strain_details_df.rds&#39;)
+    
+}else{
+    
+    strain_details &lt;-
+        map(strain_pages, get_strain_info, msg = TRUE)
+    
+    strain_details_df &lt;-
+        strain_details %&gt;%
+        bind_rows()
+    
+    write_rds(strain_details_df, &#39;strain_details_df.rds&#39;)
+    
+}
+
+strain_details_df$id %&gt;%
+    unique() %&gt;%
+    length()</code></pre>
+<pre><code>## [1] 1253</code></pre>
+<pre class="r"><code>strain_details_df_wide &lt;-
+    strain_details_df %&gt;%
+    mutate(var =
+               ifelse(str_detect(var, &#39;Highest Test&#39;), &#39;highest test&#39;,
+                      ifelse(str_detect(var, &#39;Average$&#39;), &#39;average&#39;,
+                             var))) %&gt;%
+    mutate(var =
+               var %&gt;%
+               str_replace_all(&#39; &#39;, &#39;_&#39;) %&gt;%
+               tolower()) %&gt;%
+    mutate(var =
+               ifelse(str_detect(category, &#39;description|lineage&#39;), var,
+                      str_c(category, &#39;__&#39;, var))) %&gt;%
+    mutate(var =
+               var %&gt;%
+               str_replace_all(&#39;[^a-zA-z0-9 ]&#39;, &#39;&#39;)) %&gt;%
+    select(-category) %&gt;%
+    group_by(id, var) %&gt;%
+    slice(1) %&gt;%
+    ungroup() %&gt;%
+    spread(var, val) %&gt;%
+    mutate(thc__average_indica =
+               ifelse(is.na(thc__average_indica), 0, thc__average_indica),
+           thc__average_sativa =
+               ifelse(is.na(thc__average_sativa), 0, thc__average_sativa),
+           thc__average_hybrid =
+               ifelse(is.na(thc__average_hybrid), 0, thc__average_hybrid)) %&gt;%
+    mutate(main_strain =
+               ifelse(thc__average_indica &gt; thc__average_sativa &amp;
+                          thc__average_indica &gt; thc__average_hybrid, &#39;indica&#39;,
+                      ifelse(thc__average_sativa &gt; thc__average_indica &amp;
+                                 thc__average_sativa &gt; thc__average_hybrid, &#39;sativa&#39;,
+                             &#39;hybrid&#39;))) %&gt;%
+    left_join(strain_links_df %&gt;%
+                  select(id, strain),
+              by = &#39;id&#39;)
+
+str(strain_details_df_wide)</code></pre>
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    1253 obs. of  50 variables:
+##  $ id                   : num  1 2 3 4 5 6 7 8 9 10 ...
+##  $ description          : chr  &quot;\nOne of the original landrace strains that precipitated the popularization of cannabis throughout the world, H&quot;| __truncated__ &quot;\nBorn of two unknown Skunk varieties, Orange Bud by Dutch Passion boasts brilliant flavors, an ultra creative &quot;| __truncated__ &quot;\nNYC Diesel is a mostly Sativa hybrid that has won 9 different cannabis cup awards (though not every award has&quot;| __truncated__ &quot;\nAs a strain with one of the highest levels of THC, this Sativa-dominant cross offers one of the most potent h&quot;| __truncated__ ...
+##  $ effects__cotton_mouth: chr  &quot;40&quot; &quot;20&quot; NA &quot;20&quot; ...
+##  $ effects__creativity  : chr  NA NA &quot;80&quot; &quot;60&quot; ...
+##  $ effects__dizziness   : chr  NA NA NA NA ...
+##  $ effects__dry_eyes    : chr  NA NA NA NA ...
+##  $ effects__energy      : chr  NA &quot;60&quot; &quot;100&quot; &quot;80&quot; ...
+##  $ effects__euphoria    : chr  &quot;60&quot; &quot;100&quot; &quot;80&quot; &quot;100&quot; ...
+##  $ effects__focus       : chr  NA NA &quot;20&quot; NA ...
+##  $ effects__happy       : chr  NA NA NA NA ...
+##  $ effects__headache    : chr  NA NA NA NA ...
+##  $ effects__hungry      : chr  NA NA NA NA ...
+##  $ effects__paranoia    : chr  NA NA &quot;20&quot; &quot;60&quot; ...
+##  $ effects__relax       : chr  &quot;60&quot; &quot;80&quot; NA NA ...
+##  $ effects__sedated     : chr  &quot;100&quot; &quot;40&quot; NA NA ...
+##  $ effects__sleep       : chr  &quot;80&quot; NA NA NA ...
+##  $ effects__social      : chr  NA NA NA NA ...
+##  $ lineage_1            : chr  NA &quot;Skunk #1&quot; NA &quot;Haze&quot; ...
+##  $ lineage_2            : chr  NA NA NA &quot;White Widow&quot; ...
+##  $ lineage_3            : chr  NA NA NA NA ...
+##  $ lineage_4            : chr  NA NA NA NA ...
+##  $ origin__origin_1     : chr  NA &quot;Netherlands&quot; NA NA ...
+##  $ origin__origin_2     : chr  NA &quot;United States&quot; NA NA ...
+##  $ origin__origin_3     : chr  NA NA NA NA ...
+##  $ origin__origin_4     : chr  NA NA NA NA ...
+##  $ origin__origin_5     : chr  NA NA NA NA ...
+##  $ origin__origin_6     : chr  NA NA NA NA ...
+##  $ origin__origin_7     : chr  NA NA NA NA ...
+##  $ thc__average         : chr  &quot;14.0&quot; &quot;13.0&quot; &quot;15.0&quot; &quot;18.0&quot; ...
+##  $ thc__average_hybrid  : chr  &quot;0&quot; &quot;0&quot; &quot;0&quot; &quot;0&quot; ...
+##  $ thc__average_indica  : chr  &quot;12.5&quot; &quot;12.5&quot; &quot;0&quot; &quot;0&quot; ...
+##  $ thc__average_sativa  : chr  &quot;0&quot; &quot;0&quot; &quot;13.5&quot; &quot;13.5&quot; ...
+##  $ thc__highest_test    : chr  &quot;20.0&quot; &quot;16.5&quot; &quot;21.5&quot; &quot;21.6&quot; ...
+##  $ use__addadhd         : chr  NA NA NA NA ...
+##  $ use__alzheimers      : chr  NA NA NA NA ...
+##  $ use__anxiety         : chr  &quot;40&quot; &quot;80&quot; &quot;80&quot; &quot;80&quot; ...
+##  $ use__arthritis       : chr  NA NA NA NA ...
+##  $ use__asthma          : chr  NA NA NA NA ...
+##  $ use__depression      : chr  &quot;60&quot; &quot;60&quot; &quot;100&quot; &quot;100&quot; ...
+##  $ use__eating_disorders: chr  NA NA NA NA ...
+##  $ use__insomnia        : chr  &quot;100&quot; NA NA NA ...
+##  $ use__loss_of_appetite: chr  &quot;40&quot; &quot;60&quot; &quot;60&quot; &quot;40&quot; ...
+##  $ use__migraines       : chr  NA NA NA NA ...
+##  $ use__nausea          : chr  NA &quot;20&quot; &quot;60&quot; &quot;40&quot; ...
+##  $ use__pain            : chr  &quot;100&quot; &quot;100&quot; &quot;20&quot; &quot;20&quot; ...
+##  $ use__ptsd            : chr  NA NA NA NA ...
+##  $ use__stress          : chr  NA NA NA NA ...
+##  $ use__womens_health   : chr  NA NA NA NA ...
+##  $ main_strain          : chr  &quot;indica&quot; &quot;indica&quot; &quot;sativa&quot; &quot;sativa&quot; ...
+##  $ strain               : chr  &quot;Alien Technology&quot; &quot;Arcata Trainwreck&quot; &quot;Aspen OG&quot; &quot;Blue Cookies&quot; ...</code></pre>
+<pre class="r"><code>main_strains_df &lt;-
+    strain_details_df_wide %&gt;%
+    select(strain, main_strain)
+
+network_df &lt;-
+    strain_details_df %&gt;%
+    filter(category == &#39;lineage&#39;) %&gt;%
+    filter(!is.na(val)) %&gt;%
+    left_join(strain_links_df %&gt;%
+                  select(id, strain),
+              by = &#39;id&#39;) %&gt;%
+    select(val, strain) %&gt;%
+    rename(from = val,
+           to = strain) %&gt;%
+    inner_join(main_strains_df,
+               by = c(&#39;from&#39; = &#39;strain&#39;))
+
+head(network_df)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   from           to                 main_strain
+##   &lt;chr&gt;          &lt;chr&gt;              &lt;chr&gt;      
+## 1 Haze           Girl Scout Cookies hybrid     
+## 2 Neville&#39;s Haze Girl Scout Cookies hybrid     
+## 3 OG Kush        Eugene Cream       sativa     
+## 4 Afghani        Eugene Cream       hybrid     
+## 5 Skunk #1       Azure Haze         indica     
+## 6 Afghani        Azure Haze         hybrid</code></pre>
+<pre class="r"><code>g_green &lt;-
+  graph_from_data_frame(network_df) %&gt;%
+  bc3net::getgcc()
+
+g_green %&gt;%
+  ggraph(layout = &#39;linear&#39;, circular = TRUE) +
+  geom_edge_arc(aes(col = main_strain),
+                edge_width = .3, alpha = .3) +
+  theme_void()</code></pre>
+<p><img src="images/jajaja4-1.png" width="960" style="display: block; margin: auto;" /></p>
+<!-- Having done all this. I now must admit that for this post, creating this data frame is overkill. We are not going to use the data frame format of the different books. But having this format is incredibly useful for libraries like *tidytext* that use data frame structures for text analytics. These libraries are very intuitive, and, as the "tidy" prefix suggests, they fit right into the tidyverse. -->
+<!-- ##### Small example of *tidytext* -->
+<!-- Ok, I cannot help myself. Here is a super brief example of how to see the counts of the word "Hermione" across all books and chapters. I am going to use the "::" notation, which allows you to call a function from a package without loading the entire thing. For python users, this is que equivalent as: from package import function. Just make sure you've installed *tidytext*. -->
+<!-- ```{r pixel_histogram, fig.height = 6, fig.width = 8, fig.align = 'center'} -->
+<!-- tidytext_demo_df <- -->
+<!--     all_books_df %>% -->
+<!--     # The following creates a data frame with 3 columns: -->
+<!--     # book and chapter (from the all_books df) -->
+<!--     # and word, the breakdown of text into a "bag of words" -->
+<!--     tidytext::unnest_tokens(output = word, input = txt) -->
+<!-- # Create line chart of the counts of "hermione" over each of the books -->
+<!-- tidytext_demo_df %>% -->
+<!--     # Filter for "hermione" -->
+<!--     filter(word == 'hermione') %>% -->
+<!--     # Create counts for each book-chapter pair -->
+<!--     group_by(book, chapter) %>% -->
+<!--     summarise(cnt = n()) %>% -->
+<!--     # Plot the lines broken up by books -->
+<!--     ggplot(aes(x = chapter, y = cnt)) + -->
+<!--     geom_line() + -->
+<!--     facet_wrap(~ book, nrow = 2) -->
+<!-- ``` -->
+<!-- I really hope that you can see the enormous value in this type of text analytics in R. It is incredibly intuitive and useful. -->
+<!-- In case you want to dig a little deeper into this, go straight to the source. This is a book written by the people that wrote the library: -->
+<!-- https://www.tidytextmining.com/. -->
+<!-- Ok. Sorry for the tangent... -->
+<!-- ```{r out.width = '80%', fig.align = 'center', echo = FALSE} -->
+<!-- include_graphics('vikings_onward.gif') -->
+<!-- ``` -->
+<!-- <div style="text-align: center;"> -->
+<!-- Source: http://historyvikings.tumblr.com/post/143267209188 -->
+<!-- </div> -->
+<!-- Btw, if you haven't watched Vikings yet, it is spectacular! -->
+<!-- https://www.google.com/search?q=vikings+rating -->
+<!-- ##### Exporting the text -->
+<!-- To create the vector space model (I will explain in just a little bit what that is all about), the *wordVectors* library needs for all the text to be stored in a folder. This is typically called a corpus. Although I have not read this explicitly anywhere, the probable reason for reading from a folder is that, given all the calculations and thus RAM that R needs to run the algorithm, it is better to not have the text already loaded and taking up memory. Moreover, you might want to create a vector space model with a lot of text, and it might not all load into memory. -->
+<!-- For example, Google trained its word2vec algorithm on close to 50 billion words: -->
+<!-- http://mccormickml.com/2016/04/12/googles-pretrained-word2vec-model-in-python/ -->
+<!-- In comparison, all the Harry Potter books have about 1.1 million words. If you are wondering where I got this number, it's simply the number of rows of tidytext_demo_df. The tidytext demo did come in handy! -->
+<!-- ```{r row_num} -->
+<!-- # See the top rows -->
+<!-- nrow(tidytext_demo_df) -->
+<!-- ``` -->
+<!-- To store the text, we just need to collapse all the books into a single character vector and dump it into a text file. I create this file inside of a folder called "all_books", which has already been created. -->
+<!-- ```{r row_num2} -->
+<!-- # Collapse the data frame column containing all the text -->
+<!-- all_books <- -->
+<!--     str_c(all_books_df, collapse = '\n\n\n') -->
+<!-- # Establish a connection with the file -->
+<!-- file_conn <- file('all_books/hp_all.txt') -->
+<!-- # Dump the vector into it -->
+<!-- writeLines(all_books, file_conn) -->
+<!-- # Close the connection -->
+<!-- close(file_conn) -->
+<!-- ``` -->
+<!-- Perfect. Now we have the text document with all the HP books in the all_books folder. Note that it would have also been fine to create 7 different files, one for each book. -->
+<!-- ### Creating the vector space model -->
+<!-- ##### First thing first: what the hell is a vector space model? -->
+<!-- A vector space model, for lack of a better explanation, is a map. Although these models tend to have hundreds of dimensions, lets first work with just 2. This allows us to think of it as a flat surface (or a cartesian plane), just like a map. The points on a map (e.g. towns or cities) have an x value, longitude, and a y value, latitude. -->
+<!-- ```{r out.width = '90%', fig.align = 'center', echo = FALSE} -->
+<!-- include_graphics('europe_map.jpg') -->
+<!-- ``` -->
+<!-- <div style="text-align: center;"> -->
+<!-- Source: [asperia.org](http://asperia.org/map-western-europe-cities/europe-map-cities-download-map-western-europe-cities-major-tourist-attractions-maps-650-x-655-pixels-on-map-western-europe-cities/) -->
+<!-- </div> -->
+<!-- These points also have relationships between one another, distance being the most basic: what is the closest city to Germany? Or: which is farther from Berlin, Paris or Brussels? To the idea of distance, you might also add direction: where would we end up if we took the vector (or the line) going Berlin to Paris, but started at Brussels? This is the equivalent of: -->
+<!-- <div style="text-align: center;"> -->
+<!-- **Paris - Berlin + Brussels** -->
+<!-- </div> -->
+<!-- Probably somewhere in the Atlantic. -->
+<!-- It's very easy to check. Create a vector with latitude and longitude for each of the cities (got them from Google) and check the result of the calculation. -->
+<!-- ```{r city_calc} -->
+<!-- # Create vectors -->
+<!-- paris <- -->
+<!--     c(48.8566, 2.3522)  -->
+<!-- berlin <- -->
+<!--     c(52.52, 13.405) -->
+<!-- brussels <- -->
+<!--     c(50.8503, 4.3517) -->
+<!-- # Calculate new vector -->
+<!-- # Note on dealing with North, South, East and West: -->
+<!-- # north latitudes are positive and south latitudes are negative -->
+<!-- # east longitudes are positive and west longitudes are negative -->
+<!-- new_vector <- -->
+<!--     paris - berlin + brussels -->
+<!-- new_vector -->
+<!-- ``` -->
+<!-- So, the new vector is 47.1869N, 6.7011W. A quick Google search for these coordinates and we can confirm that the new vector is indeed in the Atlantic. -->
+<!-- ```{r out.width = '90%', fig.align = 'center', echo = FALSE} -->
+<!-- include_graphics('new_vector.JPG') -->
+<!-- ``` -->
+<!-- <div style="text-align: center;"> -->
+<!-- Source: [Google Maps](https://www.google.com/maps/place/47%C2%B011'12.8%22N+6%C2%B042'04.0%22W/@48.4101682,3.5432826,5z/data=!4m5!3m4!1s0x0:0x0!8m2!3d47.1868889!4d-6.7011111) -->
+<!-- </div> -->
+<!-- If we consider this example as a table or data frame, Berlin, Paris and Brussels have vectors (rows) with 2 values (columns), latitude and longitude. We could also add population as a 4th, non-spatial, dimension. Although it is very difficult to visualize how this would work, you can certain calculate a difference between the population of Paris and that of Berlin, which would be the equivalent of a distance. -->
+<!-- ##### Ok, so what does this have to do with text? -->
+<!-- Keeping the original 2-dimensional map in mind, but now replace the cities with the words of a text. Now you got yourself a vector space model. The dimensions don't have a significance like latitude and longitude. But all the comparisons we discussed, in terms of distance and direction, can certainly be maintained. -->
+<!-- It is precisely through these comparisons that the word2vec algorithm that Google created got its fame. -->
+<!-- http://mccormickml.com/2016/04/12/googles-pretrained-word2vec-model-in-python/ -->
+<!-- Remember how we discussed calculating Paris - Berlin + Brussels? Google did something similar: -->
+<!-- <div style="text-align: center;"> -->
+<!-- **king - man + woman** -->
+<!-- </div> -->
+<!-- The result of this operation was: -->
+<!-- <div style="text-align: center;"> -->
+<!-- **queen** -->
+<!-- </div> -->
+<!-- ```{r out.width = '70%', fig.align = 'center', echo = FALSE} -->
+<!-- include_graphics('word2vec_king_queen_vectors.png') -->
+<!-- ``` -->
+<!-- <div style="text-align: center;"> -->
+<!-- Source: https://www.depends-on-the-definition.com/guide-to-word-vectors-with-gensim-and-keras/ -->
+<!-- </div> -->
+<!-- And this result makes perfect sense: if you convert a king from a man to a woman, you get a queen. So, the vector space model was so well created that is contained the very subtle concepts of gender and monarchy, and they were essentially operational. -->
+<!-- There are a lot of super interesting results that came from Google's "word map". Here are some links that discuss them and how the word2vec algorithm works in detail: -->
+<!-- * https://www.tensorflow.org/tutorials/representation/word2vec -->
+<!-- * https://skymind.ai/wiki/word2vec -->
+<!-- ##### So, in conclusion -->
+<!-- A vector space model is simply a map. Although many applications (including this one) have to do with text analytics and natural language processing (so creating maps of words), there are many other applications of these models. For example: -->
+<!-- https://towardsdatascience.com/a-non-nlp-application-of-word2vec-c637e35d3668. -->
+<!-- Fivethirtyeight also had an amazing article of using a vector space model of Reddit groups for better understanding the groups related to Donald Trump: -->
+<!-- https://fivethirtyeight.com/features/dissecting-trumps-most-rabid-online-following/. -->
+<!-- So, there is a huge amount of applicability. -->
+<!-- Now we're ready to get our hands dirty. -->
+<!-- ##### Training the vector space model -->
+<!-- Before training the vector space model ("training" in machine learning terminology means running data through an algorithm), the *wordVectors* library preprocesses the data. This is just like any other text analytics process in which the excesses of the text (uppercase letters, stop words, punctuation, etc.) are removed from the text. This is essentially removing noise to get the best signal possible. Once again, the results are saved as an external file to not take space in memory. Although in this example we only have a single source file (all 7 books in a single document), if we had more files in the origin folder, they all would be processed and concatenated into a single destination file.  -->
+<!-- ```{r vector_space_preprocessing, results = 'hide', message = FALSE} -->
+<!-- prep_word2vec( -->
+<!--     origin = 'all_books', -->
+<!--     destination = 'hp_all_processed.txt', -->
+<!--     lowercase = TRUE, -->
+<!--     # ngrams refers to the maximum number of words per phrase -->
+<!--     bundle_ngrams = 2) -->
+<!-- ``` -->
+<!-- Now that we have the preprocessed file, we can train the model. Once again, the results are stored in an external file (a binary file) which then can be read in. Note that the training could be assigned into an object (object <- train_word2vec(...) ), in which case it would have both written the binary file and kept it in an object in memory. Other than the choice of number of dimensions, the rest of the function parameters go into the innerworkings of the word2vec model. The library's GitHub page has further explanations that you can explore and get further insight into what each parameter is tuning. -->
+<!-- ```{r vector_space_creation, results = 'hide'} -->
+<!-- # Only train model if the binary model file does not exist -->
+<!-- # If model exists, the train_word2vec function throws an error -->
+<!-- if(!file.exists('hp_all_processed.bin')){ -->
+<!--     # Train the model -->
+<!--     train_word2vec( -->
+<!--         train_file = 'hp_all_processed.txt', -->
+<!--         output_file = 'hp_all_processed.bin', -->
+<!--         # This defines the number of dimensions per vector -->
+<!--         vectors = 200, -->
+<!--         threads = 4, -->
+<!--         window = 12, -->
+<!--         iter = 5, -->
+<!--         negative_samples = 0) -->
+<!-- } -->
+<!-- # Read the model's binary file -->
+<!-- suppressMessages( -->
+<!--     w2v_model <- -->
+<!--         read.binary.vectors('hp_all_processed.bin') -->
+<!-- ) -->
+<!-- ``` -->
+<!-- And that's it. The model is complete. -->
+<!-- ### Exploring the results -->
+<!-- ##### Playing around with similarities -->
+<!-- One of the most interesting features of vector space models is the ability to test the proximity of the model elements, in this case the words and phrases of the Harry Potter books. For the more curious among you, this is done by looking at the cosine similarity between elements. Here is a great example and explanation of how cosine distance is calculated and why it is a better metric for these types of models (as opposed to something Euclidean distance): https://cmry.github.io/notes/euclidean-v-cosine. -->
+<!-- The *wordVectors* package has a very easy to use function for just this calculation. -->
+<!-- ```{r similarities} -->
+<!-- # Get the 10 closest concepts to "patronus" -->
+<!-- w2v_model %>% -->
+<!--     closest_to(vector = "patronus", n = 10) -->
+<!-- ``` -->
+<!-- As you can see, the closest concept to "patronus" is "stag". This makes complete sense. In the books, patronuses usually appear when Harry produces them and Harry's patronus is a stag. Still, even though the cosine similarity of "stag" is considerably larger that the next closest, there are going to be other terms that are much closer to one another. There are other cool things that you can do (king - man + woman type operations). I recommend you look at the GitHub documentation of the *wordVectors* to get some ideas. -->
+<!-- ```{r out.width = '95%', fig.align = 'center', echo = FALSE} -->
+<!-- include_graphics('expecto_patronum.jpg') -->
+<!-- ``` -->
+<!-- <div style="text-align: center;"> -->
+<!-- Source: [Shepherd of the Gurneys](http://shepherdofthegurneys.blogspot.com/2016/12/expecto-patronum.html) -->
+<!-- </div> -->
+<!-- ##### Getting character vectors -->
+<!-- A very similar way of analyzing vector space data is through a clustering algorithm. If you are not familiar with clustering, it groups the observations of a dataset that are closest to one another based on a chosen distance metric. Here is a great explanation of clustering and its main algorithms: -->
+<!-- https://www.analyticsvidhya.com/blog/2016/11/an-introduction-to-clustering-and-different-methods-of-clustering/. -->
+<!-- In this vector space model, clustering would allow to determine which terms in the Harry Potter books naturally group together. -->
+<!-- Although it would be very interesting to see how all the books' concepts cluster, I am more interested in how the different characters cluster. For this, I got a list of all Harry Potter characters from Wikipedia and added a few more variables (stored in the harry_potter_characters.csv file). The most important of these is a search parameter. -->
+<!-- https://en.wikipedia.org/wiki/List_of_Harry_Potter_characters -->
+<!-- For example, instead of looking for instances of "Alastor Mad-Eye Moody" in the text, I would simply look for "Mad-Eye". This might not be perfect since there are instances in which he is referred to as "Alastor", but it works well enough. The optimal way to search would be have multiple search terms per character and have them all map to a single name, but for the vector space models, these changes must be made to the source text. So, for the sake of simplicity, a I used a single term (the one I consider most relevant) for each character. -->
+<!-- ```{r get_matrix, message = FALSE} -->
+<!-- # Read dataset with all characters and relevant metadata -->
+<!-- hp_characters_df <- -->
+<!--     read_csv('harry_potter_characters.csv', progress = FALSE) -->
+<!-- # Extract the vector space from the word2vec model -->
+<!-- w2v_matrix <- -->
+<!--     # It's stored in the ".Data" element of the class -->
+<!--     w2v_model@.Data %>% -->
+<!--     # Convert it to a regular matrix -->
+<!--     as.matrix() -->
+<!-- # This matrix has all the vectors representing the different terms -->
+<!-- # stored as the rows (the name of the row is the term) -->
+<!-- # Only keep the terms whose row name matches the character search variable -->
+<!-- w2v_matrix_filtered <- -->
+<!--     w2v_matrix[rownames(w2v_matrix) %in% tolower(hp_characters_df$search), ] -->
+<!-- # Inspect the first 5 columns/dimensions of the matrix -->
+<!-- head(w2v_matrix_filtered[, 1:5]) -->
+<!-- ``` -->
+<!-- Awesome! So, to reiterate, in this matrix each character has a 200-dimension vector that represents, for a lack of a better term, their thematic position. So, characters that are close to one another in this conceptual space are related to one another thematically. And this is exactly what we want to get at. -->
+<!-- ##### A map of characters -->
+<!-- Remember the map analogy we discussed before? Let's first try to recreate that, but instead of European cities, we'll create a map of Harry Potter characters. For this, all we need to do is reduce the 200 dimensions to just 2. For this, we'll use a very important concept in data science: dimensionality reduction. Here is a super quick overview: -->
+<!-- * https://www.geeksforgeeks.org/dimensionality-reduction/. -->
+<!-- In short, these dimensionality reduction techniques squeeze all the information / variability from many variables to a few. The most frequently techniques used are Principal Component Analysis (PCA) and Singular Value Decomposition (SVD). Here is a detailed explanation and comparison of both: -->
+<!-- * https://intoli.com/blog/pca-and-svd/. -->
+<!-- ```{r map, fig.height = 8, fig.width = 10, fig.align = 'center'} -->
+<!-- # Reduce matrix to 2 dimensions using single value decomposition. -->
+<!-- character_map_df <- -->
+<!--     # Using dsm.projection from the wordspace library -->
+<!--     dsm.projection(model = w2v_matrix_filtered, -->
+<!--                    # Reducing to 2 dimensions -->
+<!--                    n = 2, -->
+<!--                    # Using singular value decomposition -->
+<!--                    method = 'svd') %>% -->
+<!--     # Convert matrix to a data frame -->
+<!--     as.data.frame() %>% -->
+<!--     # Convert rownames of character into a column named character -->
+<!--     rownames_to_column('character') %>% -->
+<!--     # Rename the resulting dimensions to vec1 and vec2 (from svd1 and svd2) -->
+<!--     # This is so that you can try different reduction algorithms -->
+<!--     # but have consistent names for plotting -->
+<!--     rename('vec1' = !!names(.[2]), -->
+<!--            'vec2' = !!names(.[3])) -->
+<!-- # Plot -->
+<!-- character_map_df %>% -->
+<!--     ggplot(aes(x = vec1, y = vec2)) + -->
+<!--     geom_text(aes(label = character)) -->
+<!-- ``` -->
+<!-- This map is pretty cool, but it's pretty hard to fully read. For another and a little clearer way of visualizing this data, clustering and dendrograms (a clustering visualization technique) offer a solution. At the end, it'll be very easy to read which characters are closest to each other and form natural thematic groups. I previously briefly covered clustering, and, in particular, k-means clustering in the post "From an image of a scatter plot to a regression in R". Here are great overviews of the hierarchical clustering algorithm and of dendrograms: -->
+<!-- * https://www.displayr.com/what-is-hierarchical-clustering/. -->
+<!-- * https://www.displayr.com/what-is-dendrogram/ -->
+<!-- ```{r exploration, fig.height = 25, fig.width = 10, fig.align = 'center'} -->
+<!-- # The first step is to calculate the distance matrix -->
+<!-- # As mentioned previously, the cosine distance is the best -->
+<!-- # distance metric for vector space models. -->
+<!-- distance_matrix <- -->
+<!--     dist(w2v_matrix_filtered, -->
+<!--          method = "cosine") -->
+<!-- # Run hierarchical clustering algorithm - hclust function (stats library) -->
+<!-- hierarchical_cluster <- -->
+<!--     # Feed the distance matrix -->
+<!--     hclust(distance_matrix, -->
+<!--            # For a full explanation of methods, go to function help -->
+<!--            method = "complete") -->
+<!-- # Replace the search terms with the full names -->
+<!-- name_match <- -->
+<!--     # Create a data frame with the cluster labels -->
+<!--     data_frame( -->
+<!--         char_names = hierarchical_cluster$labels -->
+<!--     ) %>% -->
+<!--     # Join the characters data frame matching the search term -->
+<!--     left_join(hp_characters_df %>% -->
+<!--                   mutate(char_names = tolower(search)), -->
+<!--               by = 'char_names') %>% -->
+<!--     # Mark down order to be able to maintain it when the names are switched -->
+<!--     mutate(order = 1:n()) %>% -->
+<!--     # Only maintain name per character using the group_by and slice -->
+<!--     # This is just a cleaning up method -->
+<!--     group_by(char_names) %>% -->
+<!--     slice(1) %>% -->
+<!--     ungroup() %>% -->
+<!--     # Return to original order - group_by changes the data frame order -->
+<!--     arrange(order) -->
+<!-- # Replace the cluster labels with the full names -->
+<!-- hierarchical_cluster$labels <- -->
+<!--     name_match$full_name -->
+<!-- # Plot the obtained dendrogram -->
+<!-- ggdendro::ggdendrogram( -->
+<!--     data = hierarchical_cluster, -->
+<!--     rotate = TRUE -->
+<!-- ) -->
+<!-- ``` -->
+<!-- Now we can start seeing the natural groupings of the characters. To make facilitate reading the graph and to make it look prettier :), I exported it as a PDF, popped it into Adobe Illustrator, and improved made some improvements (background, font size, colors, spacing, etc.). -->
+<!-- ```{r out.width = '95%', fig.align = 'center', echo = FALSE} -->
+<!-- include_graphics('dendrogram_final2-01.png') -->
+<!-- ``` -->
+<!-- Awesome! This is exactly what I was looking for when I began experimenting with word2vec and the Harry Potter books. Hope you enjoyed it and that you learned some cool stuff. -->
+<!-- Cheers! -->
+<!-- ```{r out.width = '80%', fig.align = 'center', echo = FALSE} -->
+<!-- include_graphics('hp_dance.gif') -->
+<!-- ``` -->
+<!-- <div style="text-align: center;"> -->
+<!-- Source: https://ignitedmoth.wordpress.com/2017/06/26/20-magical-years-of-harry-potter/ -->
+<!-- </div> -->
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
